@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace Mazeclass
 {
+
+    enum MazeCellStatus
+    {
+        Unvisited,
+        Visited,
+        PlayerHere,
+        Goal
+    }
     internal class Maze
     { 
         //technically i could get height and width from the matrixes
@@ -13,7 +21,7 @@ namespace Mazeclass
         private int height { get; set; }
         private int width { get; set; }
         //cells matrix will be used to mark the cells: goal + currently standing on + snail trail we made
-        public int[,] cells { get; set; }
+        public MazeCellStatus[,] cells { get; set; }
         //true = there is a wall there. false: there isn't a wall there.
         public bool[,] verticalWalls { get; set; }
         public bool[,] horizontalWalls { get; set; }
@@ -23,6 +31,7 @@ namespace Mazeclass
         //first coordinate is horizontal, X, second is vertical, Y
         //they start at the upper left corner
         /*
+         * width = 4, height = 3
             0   1   2
     0 _ |0,0|1,0|2,0|3,0|
     1 _ |0,1|1,1|2,1|3,1|
@@ -31,16 +40,33 @@ namespace Mazeclass
 
         public Maze(bool[,] verticalWalls, bool[,] horizontalWalls)
         {
-            //requirement: the size of the two matrixes need to be the same
-            //TODO: throw an error if it's invalid
-            this.verticalWalls = verticalWalls;
-            this.horizontalWalls = horizontalWalls;
-            //only the inner walls are represented here
             //the edges are always walls
-            this.height = verticalWalls.GetLength(0);
-            this.width = verticalWalls.GetLength(1);
-            playerXCoord = 0;
-            playerYCoord = 0;
+            this.height = verticalWalls.GetLength(0)+1;  //GetLength(0), GetLength(1): gives me height and width of a matrix
+            this.width = verticalWalls.GetLength(1)+1;
+            if (verticalWalls.GetLength(0) == horizontalWalls.GetLength(0) && verticalWalls.GetLength(1) == horizontalWalls.GetLength(1))
+            {
+				this.verticalWalls = verticalWalls;
+				this.horizontalWalls = horizontalWalls;
+				//only the inner walls are represented here
+				playerXCoord = 0;
+				playerYCoord = 0;
+				cells = new MazeCellStatus[height, width];
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        cells[i, j] = MazeCellStatus.Unvisited;
+                    }
+                }
+                cells[0, 0] = MazeCellStatus.PlayerHere;
+                cells[width - 1, height - 1] = MazeCellStatus.Goal;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(":(");
+            }
+
+
         }
         //using these two bools (areWeGoingVertical,areWeIncreasingCoord)
         //makes this feel more understandable for me
@@ -49,6 +75,7 @@ namespace Mazeclass
         {
             if (CanIGoThere(areWeGoingVertical, areWeIncreasingCoord))
             {
+                cells[playerXCoord, playerYCoord] = MazeCellStatus.Visited;
                 if (areWeGoingVertical && areWeIncreasingCoord)
                 {
                     playerYCoord++;
@@ -65,18 +92,31 @@ namespace Mazeclass
                 {
                     playerXCoord--;
                 }
+                cells[playerXCoord, playerYCoord] = MazeCellStatus.PlayerHere;
             }
             //I don't know how to make a better system to show me while debugging
             //because. i only have a console
-            //wpf should be implemented later
-                Console.WriteLine($"{playerXCoord}, {playerYCoord}");
-        }
+            //wpf should be implemented late
+            //DEBUG START
+            Console.WriteLine($"{playerXCoord}, {playerYCoord}");
+
+			for (int i = 0; i < height; i++)
+			{
+				for (int j = 0; j < width; j++)
+				{
+                    Console.Write(cells[i,j]);
+                    Console.Write("    ");
+                }
+                Console.WriteLine();
+			}
+            //DEBUG END
+            //delete when we have some visual
+		}
 
         private bool CanIGoThere(bool areWeGoingVertical, bool areWeIncreasingCoord)
         {
             int wallXCoord = this.playerXCoord;
             int wallYCoord = this.playerXCoord;
-            //these ^ are unnecessary; i need to clean up the if-elses
             if (areWeGoingVertical)
             {
                 wallYCoord = areWeIncreasingCoord ? playerYCoord : playerYCoord - 1;
@@ -85,7 +125,10 @@ namespace Mazeclass
             {
                 wallXCoord = areWeIncreasingCoord ? playerXCoord:playerXCoord-1;                
             }
-            bool isOutOfBounds = wallXCoord < 0 || wallYCoord < 0 || wallXCoord == width || wallYCoord == height;
+            //is out of bounds: as in, are we trying to go out of bounds
+            //if the wall coords are outside the wall matrix, then it means they are the outer edges not represented in the matrixes
+            //which are always walls, never walkable
+            bool isOutOfBounds = wallXCoord < 0 || wallYCoord < 0 || wallXCoord == width-1 || wallYCoord == height-1; 
             if (isOutOfBounds)
             {
                 return false;
