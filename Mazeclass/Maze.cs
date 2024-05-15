@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -68,6 +69,40 @@ namespace Mazeclass
 
 
         }
+
+        public void WriteFullStatus() //FOR DEBUGGING. writes everything on the console.
+        {
+            Console.WriteLine("Cells: \n");
+
+			for (int i = 0; i < height; i++)
+			{
+                for (int j = 0; j < width; j++)
+                {
+                    Console.Write($"{cells[i, j]} ");
+				}
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("Walls: \n");
+			for (int i = 0; i < height-1; i++)
+			{
+				for (int j = 0; j < width-1; j++)
+				{
+					Console.Write($"{horizontalWalls[i, j]} ");
+				}
+				Console.WriteLine("  horizontal");
+
+				for (int j = 0; j < width-1; j++)
+				{
+					Console.Write($"{verticalWalls[i, j]} ");
+				}
+				Console.WriteLine("  vertical");
+			}
+            Console.WriteLine($"player coords: {playerXCoord}, {playerYCoord}");
+
+        }
+        //END OF DEBUG
+
         //using these two bools (areWeGoingVertical,areWeIncreasingCoord)
         //makes this feel more understandable for me
         //feel free to revise. maybe keystroke would work better
@@ -94,23 +129,7 @@ namespace Mazeclass
                 }
                 cells[playerXCoord, playerYCoord] = MazeCellStatus.PlayerHere;
             }
-            //I don't know how to make a better system to show me while debugging
-            //because. i only have a console
-            //wpf should be implemented late
-            //DEBUG START
-            Console.WriteLine($"{playerXCoord}, {playerYCoord}");
 
-			for (int i = 0; i < height; i++)
-			{
-				for (int j = 0; j < width; j++)
-				{
-                    Console.Write(cells[i,j]);
-                    Console.Write("    ");
-                }
-                Console.WriteLine();
-			}
-            //DEBUG END
-            //delete when we have some visual
 		}
 
         private bool CanIGoThere(bool areWeGoingVertical, bool areWeIncreasingCoord)

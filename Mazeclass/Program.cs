@@ -25,6 +25,7 @@ namespace Mazeclass
             {
                 test.MovePlayer(true, true);
                 test.MovePlayer(false, true);
+                test.WriteFullStatus();
             }
             Console.ReadLine();
         }
