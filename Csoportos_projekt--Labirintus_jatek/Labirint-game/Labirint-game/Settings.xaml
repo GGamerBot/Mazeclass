@@ -1,0 +1,22 @@
+﻿<Window x:Class="Labirint_game.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Labirint_game"
+        mc:Ignorable="d"
+        Title="Settings" Height="280" Width="500">
+    <Grid>
+        <TextBox HorizontalAlignment="Left" Margin="43,34,0,0" TextWrapping="Wrap" Text="Téma" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Margin="43,125,0,0" TextWrapping="Wrap" Text="Játék mód" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="inSettingsStartBtn" Content="Start" HorizontalAlignment="Left" Margin="189,193,0,0" VerticalAlignment="Top" Height="41" Width="105" Click="inSettingsStartBtn_Click"/>
+        <RadioButton x:Name="lightThemeRdb" Content="Világos" HorizontalAlignment="Left" Margin="198,34,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="darkThemeRdb" Content="Sötét" HorizontalAlignment="Left" Margin="305,34,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="Spongyabob" HorizontalAlignment="Left" Margin="198,73,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="Csillagok" HorizontalAlignment="Left" Margin="389,73,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="Téglafal" HorizontalAlignment="Left" Margin="305,73,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="Túlélő" HorizontalAlignment="Left" Margin="192,128,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="God mode" HorizontalAlignment="Left" Margin="305,128,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

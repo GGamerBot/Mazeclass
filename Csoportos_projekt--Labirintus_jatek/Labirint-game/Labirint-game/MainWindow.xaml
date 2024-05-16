@@ -1,0 +1,14 @@
+﻿<Window x:Class="Labirint_game.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Labirint_game"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Button x:Name="startBtn" Content="Start" HorizontalAlignment="Left" Margin="294,186,0,0" VerticalAlignment="Top" Height="69" Width="196" Click="startBtn_Click"/>
+        <Button x:Name="settingsBtn" Content="Beállítások" HorizontalAlignment="Left" Margin="651,348,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.279,0.764" Click="settingsBtn_Click" Height="32" Width="95"/>
+
+    </Grid>
+</Window>
