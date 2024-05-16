@@ -75,6 +75,10 @@ namespace Mazeclass
 
         }
 
+        public bool AreWeWinning()
+        {
+            return cells[playerXCoord, playerYCoord] == MazeCellStatus.Goal;
+        }
         public void WriteFullStatus() //FOR DEBUGGING. writes everything on the console.
         {
             Console.WriteLine("Cells: \n");
@@ -136,7 +140,15 @@ namespace Mazeclass
                 {
                     playerXCoord--;
                 }
+                if (cells[playerXCoord, playerYCoord] == MazeCellStatus.Goal)
+                {
+                    Console.WriteLine("You won!");
+                }
+                else
+                {
+
                 cells[playerXCoord, playerYCoord] = MazeCellStatus.PlayerHere;
+                }
             }
 
 		}
@@ -166,6 +178,89 @@ namespace Mazeclass
                 return !(areWeGoingVertical ? horizontalWalls[wallXCoord, wallYCoord] : verticalWalls[wallXCoord, wallYCoord]);
             }
         }
+
+
+        /*TODO PROC GEN
+        //PROCEDURAL GENERATION
+        //hunt-and-kill algorythm
+        //I found it here: https://weblog.jamisbuck.org/2011/1/24/maze-generation-hunt-and-kill-algorithm
+        //instead of adding nodes to a tree, I'm marking the cells as part of the maze, and breaking the walls where the edges would be
+        //first a helper function for the random generator
+
+        private List<Tuple<int, int>> FindUnaddedNeighbors(int xcoord, int ycoord)
+        {
+            List<Tuple<int, int>> unaddedNeighborList = new List<Tuple<int, int>>();
+
+            if (xcoord + 1 < width && cells[xcoord + 1, playerYCoord] == MazeCellStatus.Buiding_NotPartOfMaze)
+            {
+                unaddedNeighborList.Add(new Tuple<int, int>(playerXCoord + 1, playerYCoord));
+            }
+            if (xcoord - 1 <= 0 && cells[xcoord + 1, playerYCoord] == MazeCellStatus.Buiding_NotPartOfMaze)
+            {
+                unaddedNeighborList.Add(new Tuple<int, int>(playerXCoord + 1, playerYCoord));
+            }
+            if (playerXCoord + 1 < height && cells[playerXCoord + 1, playerYCoord] == MazeCellStatus.Buiding_NotPartOfMaze)
+            {
+                unaddedNeighborList.Add(new Tuple<int, int>(playerXCoord + 1, playerYCoord));
+            }
+            if (playerXCoord - 1 < height && cells[playerXCoord + 1, playerYCoord] == MazeCellStatus.Buiding_NotPartOfMaze)
+            {
+                unaddedNeighborList.Add(new Tuple<int, int>(playerXCoord + 1, playerYCoord));
+            }
+            return unaddedNeighborList;
+        }
+
+        public Maze(int height, int width)
+        {
+            this.height = height;
+            this.width = width;
+
+            //gemerate initial, all-walls maze
+            for (int i = 0; i < height - 1; i++)
+            {
+                for (int j = 0; j < width - 1; j++)
+                {
+                    verticalWalls[i, j] = true;
+                    horizontalWalls[i, j] = true;
+                }
+            }
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    cells[i, j] = MazeCellStatus.Buiding_NotPartOfMaze;
+                }
+                Console.WriteLine();
+            }
+            //pseudo-player will walk through the maze
+            //random start
+            Random rnd = new Random();
+            playerXCoord = rnd.Next(width);
+            playerYCoord = rnd.Next(height);
+            cells[playerXCoord, playerYCoord] = MazeCellStatus.Building_PartOfMaze;
+            List<Tuple<int, int>> placesItCanGo = new List<Tuple<int, int>>();
+            do
+            {
+                Tuple<int, int> nextCellCoords = placesItCanGo[rnd.Next(placesItCanGo.Count)];
+                cells[playerXCoord, playerYCoord] = MazeCellStatus.Building_PartOfMaze;
+                if (nextCellCoords.Item1 == playerXCoord) //they are on the same x coordinate => y coordinate must be different
+                {
+                    int wallYCoord = playerYCoord < nextCellCoords.Item2 ? playerYCoord : nextCellCoords.Item2;
+                    horizontalWalls[playerXCoord, wallYCoord] = false;
+                    //TODO: check if i break the right wall
+                }
+                else
+                {
+                    int wallXCoord = playerXCoord < nextCellCoords.Item1 ? playerXCoord : nextCellCoords.Item1;
+                    horizontalWalls[wallXCoord, playerYCoord] = false;
+                }
+                playerXCoord = nextCellCoords.Item1;
+                playerYCoord = nextCellCoords.Item2;
+
+            } while (placesItCanGo.Count > 0);
+
+
+        }*/
     }
 
 }
