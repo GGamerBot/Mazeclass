@@ -89,7 +89,7 @@ namespace Mazeclass
 			{
                 for (int j = 0; j < height; j++)
                 {
-                    Console.Write($"{cells[i, j]} ");
+                    Console.Write($"{i},{j} {cells[i, j]} ");
 				}
                 Console.WriteLine();
             }
@@ -265,7 +265,7 @@ namespace Mazeclass
                 {
                     if (playerYCoord < nextCellCoords.Item2)
                     {
-                        horizontalWalls[playerXCoord, playerXCoord] = false;
+                        horizontalWalls[playerXCoord, playerYCoord] = false;
                     }
                     else
                     {
@@ -280,7 +280,7 @@ namespace Mazeclass
                     }
                     else
                     {
-                        verticalWalls[nextCellCoords.Item1, playerYCoord] = false;
+                        horizontalWalls[nextCellCoords.Item1, playerYCoord] = false;
                     }
                 }
                 //go to next place
