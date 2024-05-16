@@ -26,15 +26,9 @@ namespace Mazeclass
 					horWalls[i, j] = false;
 				}
 			}
-			Maze test = new Maze(vertWalls, horWalls);
-            test.MovePlayer(true, false);
-            test.MovePlayer(false, false);
-            for (int i = 0; i < 4; i++)
-            {
-                test.MovePlayer(true, true);
-                test.MovePlayer(false, true);
+			Maze test = new Maze(4, 5);
                 test.WriteFullStatus();
-            }
+            
             Console.ReadLine();
         }
     }

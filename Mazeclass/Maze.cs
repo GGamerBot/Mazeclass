@@ -13,7 +13,9 @@ namespace Mazeclass
         Unvisited,
         Visited,
         PlayerHere,
-        Goal
+        Goal,
+        Building_PartOfMaze,
+        Building_NotPartOfMaze
     }
     internal class Maze
     { 
@@ -49,17 +51,17 @@ namespace Mazeclass
             //horizontal walls: horizontal coord-1 * vertical walls
             this.height = verticalWalls.GetLength(0);  //GetLength(0), GetLength(1): gives me height and width of a matrix
             this.width = horizontalWalls.GetLength(1);
-            if (verticalWalls.GetLength(0) == horizontalWalls.GetLength(0)+1 && verticalWalls.GetLength(1) == horizontalWalls.GetLength(1)+1)
+            if (verticalWalls.GetLength(0) == horizontalWalls.GetLength(0)+1 && verticalWalls.GetLength(1)+1 == horizontalWalls.GetLength(1))
             {
 				this.verticalWalls = verticalWalls;
 				this.horizontalWalls = horizontalWalls;
 				//only the inner walls are represented here
 				playerXCoord = 0;
 				playerYCoord = 0;
-				cells = new MazeCellStatus[height, width];
-                for (int i = 0; i < height; i++)
+				cells = new MazeCellStatus[width, height];
+                for (int i = 0; i < width; i++)
                 {
-                    for (int j = 0; j < width; j++)
+                    for (int j = 0; j < height; j++)
                     {
                         cells[i, j] = MazeCellStatus.Unvisited;
                     }
@@ -83,9 +85,9 @@ namespace Mazeclass
         {
             Console.WriteLine("Cells: \n");
 
-			for (int i = 0; i < height; i++)
+			for (int i = 0; i < width; i++)
 			{
-                for (int j = 0; j < width; j++)
+                for (int j = 0; j < height; j++)
                 {
                     Console.Write($"{cells[i, j]} ");
 				}
@@ -93,9 +95,9 @@ namespace Mazeclass
             }
 
             Console.WriteLine("Hortizontal walls: \n");
-			for (int i = 0; i < height-1; i++)
+			for (int i = 0; i < width; i++)
 			{
-				for (int j = 0; j < width; j++)
+				for (int j = 0; j < height-1; j++)
 				{
 					Console.Write($"{horizontalWalls[i, j]} ");
 				}
@@ -103,13 +105,13 @@ namespace Mazeclass
 			}
 
 			Console.WriteLine("Vertical walls: \n");
-			for (int i = 0; i < height; i++)
+			for (int i = 0; i < width-1; i++)
 			{
-				for (int j = 0; j < width-1; j++)
+				for (int j = 0; j < height; j++)
 				{
 					Console.Write($"{verticalWalls[i, j]} ");
 				}
-				Console.WriteLine("  horizontal");
+				Console.WriteLine("  vertical");
 			}
 			Console.WriteLine($"player coords: {playerXCoord}, {playerYCoord}");
 
@@ -180,7 +182,7 @@ namespace Mazeclass
         }
 
 
-        /*TODO PROC GEN
+        //*TODO PROC GEN
         //PROCEDURAL GENERATION
         //hunt-and-kill algorythm
         //I found it here: https://weblog.jamisbuck.org/2011/1/24/maze-generation-hunt-and-kill-algorithm
@@ -191,76 +193,111 @@ namespace Mazeclass
         {
             List<Tuple<int, int>> unaddedNeighborList = new List<Tuple<int, int>>();
 
-            if (xcoord + 1 < width && cells[xcoord + 1, playerYCoord] == MazeCellStatus.Buiding_NotPartOfMaze)
+            if (xcoord + 1 < width && cells[xcoord + 1, ycoord] == MazeCellStatus.Building_NotPartOfMaze)
             {
-                unaddedNeighborList.Add(new Tuple<int, int>(playerXCoord + 1, playerYCoord));
+                unaddedNeighborList.Add(new Tuple<int, int>(xcoord + 1, ycoord));
             }
-            if (xcoord - 1 <= 0 && cells[xcoord + 1, playerYCoord] == MazeCellStatus.Buiding_NotPartOfMaze)
+            if (xcoord - 1 >= 0 && cells[xcoord - 1, ycoord] == MazeCellStatus.Building_NotPartOfMaze)
             {
-                unaddedNeighborList.Add(new Tuple<int, int>(playerXCoord + 1, playerYCoord));
+                unaddedNeighborList.Add(new Tuple<int, int>(xcoord - 1, ycoord));
             }
-            if (playerXCoord + 1 < height && cells[playerXCoord + 1, playerYCoord] == MazeCellStatus.Buiding_NotPartOfMaze)
+            
+            if (ycoord + 1 < height && cells[xcoord, ycoord+1] == MazeCellStatus.Building_NotPartOfMaze)
             {
-                unaddedNeighborList.Add(new Tuple<int, int>(playerXCoord + 1, playerYCoord));
+                unaddedNeighborList.Add(new Tuple<int, int>(xcoord, ycoord+1));
             }
-            if (playerXCoord - 1 < height && cells[playerXCoord + 1, playerYCoord] == MazeCellStatus.Buiding_NotPartOfMaze)
+            
+            if (ycoord - 1 >=0 && cells[xcoord, ycoord-1] == MazeCellStatus.Building_NotPartOfMaze)
             {
-                unaddedNeighborList.Add(new Tuple<int, int>(playerXCoord + 1, playerYCoord));
+                unaddedNeighborList.Add(new Tuple<int, int>(xcoord, ycoord - 1));
             }
             return unaddedNeighborList;
         }
 
-        public Maze(int height, int width)
+        public Maze(int width, int height)
         {
             this.height = height;
             this.width = width;
+            this.horizontalWalls = new bool[width, height - 1];
+            this.verticalWalls = new bool[width - 1,height];
 
-            //gemerate initial, all-walls maze
-            for (int i = 0; i < height - 1; i++)
+            //vert. walls. horizontal coord * vertical coord-1
+            //horizontal walls: horizontal coord-1 * vertical walls
+            //generate initial, all-walls maze
+            for (int i = 0; i < width - 1; i++)
             {
-                for (int j = 0; j < width - 1; j++)
+                for (int j = 0; j < height; j++)
                 {
                     verticalWalls[i, j] = true;
+                    
+                }
+            }
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height - 1; j++)
+                {
                     horizontalWalls[i, j] = true;
                 }
             }
-            for (int i = 0; i < height; i++)
+            cells = new MazeCellStatus[width, height];
+            for (int i = 0; i < width; i++)
             {
-                for (int j = 0; j < width; j++)
+                for (int j = 0; j < height; j++)
                 {
-                    cells[i, j] = MazeCellStatus.Buiding_NotPartOfMaze;
+                    cells[i, j] = MazeCellStatus.Building_NotPartOfMaze;
                 }
                 Console.WriteLine();
             }
             //pseudo-player will walk through the maze
             //random start
+
             Random rnd = new Random();
             playerXCoord = rnd.Next(width);
             playerYCoord = rnd.Next(height);
             cells[playerXCoord, playerYCoord] = MazeCellStatus.Building_PartOfMaze;
-            List<Tuple<int, int>> placesItCanGo = new List<Tuple<int, int>>();
+            List<Tuple<int, int>> placesItCanGo = FindUnaddedNeighbors(playerXCoord,playerYCoord);
             do
             {
+                //choose next place
                 Tuple<int, int> nextCellCoords = placesItCanGo[rnd.Next(placesItCanGo.Count)];
-                cells[playerXCoord, playerYCoord] = MazeCellStatus.Building_PartOfMaze;
-                if (nextCellCoords.Item1 == playerXCoord) //they are on the same x coordinate => y coordinate must be different
+                //break down wall
+                if (playerXCoord == nextCellCoords.Item1)
                 {
-                    int wallYCoord = playerYCoord < nextCellCoords.Item2 ? playerYCoord : nextCellCoords.Item2;
-                    horizontalWalls[playerXCoord, wallYCoord] = false;
-                    //TODO: check if i break the right wall
+                    if (playerYCoord < nextCellCoords.Item2)
+                    {
+                        horizontalWalls[playerXCoord, playerXCoord] = false;
+                    }
+                    else
+                    {
+                        horizontalWalls[playerXCoord, nextCellCoords.Item2] = false;
+                    }
                 }
                 else
                 {
-                    int wallXCoord = playerXCoord < nextCellCoords.Item1 ? playerXCoord : nextCellCoords.Item1;
-                    horizontalWalls[wallXCoord, playerYCoord] = false;
+                    if (playerXCoord < nextCellCoords.Item1)
+                    {
+                        verticalWalls[playerXCoord, playerYCoord] = false;
+                    }
+                    else
+                    {
+                        verticalWalls[nextCellCoords.Item1, playerYCoord] = false;
+                    }
                 }
+                //go to next place
                 playerXCoord = nextCellCoords.Item1;
                 playerYCoord = nextCellCoords.Item2;
+                //mark new place as maze part
+                cells[playerXCoord, playerYCoord] = MazeCellStatus.Building_PartOfMaze;
+                //find next possible places
+                placesItCanGo = FindUnaddedNeighbors(playerXCoord, playerYCoord);
+                WriteFullStatus();
 
             } while (placesItCanGo.Count > 0);
 
 
-        }*/
+        }
+
     }
+    
 
 }
