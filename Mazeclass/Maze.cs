@@ -110,8 +110,11 @@ namespace Mazeclass
 			Console.WriteLine($"player coords: {playerXCoord}, {playerYCoord}");
 
         }
-        //END OF DEBUG
-
+        //END OF DEBUG	    
+        public bool AreWeWinning()
+        {
+            return cells[playerXCoord, playerYCoord] == MazeCellStatus.Goal;
+        }
         //using these two bools (areWeGoingVertical,areWeIncreasingCoord)
         //makes this feel more understandable for me
         //feel free to revise. maybe keystroke would work better
@@ -136,10 +139,17 @@ namespace Mazeclass
                 {
                     playerXCoord--;
                 }
-                cells[playerXCoord, playerYCoord] = MazeCellStatus.PlayerHere;
-            }
+                if (cells[playerXCoord, playerYCoord] == MazeCellStatus.Goal)
+                {
+                    Console.WriteLine("You won!");
+                }
+                else
+                {
 
-		}
+                cells[playerXCoord, playerYCoord] = MazeCellStatus.PlayerHere;
+                }
+            }
+	}
 
         private bool CanIGoThere(bool areWeGoingVertical, bool areWeIncreasingCoord)
         {
