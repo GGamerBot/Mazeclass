@@ -10,15 +10,23 @@ namespace Mazeclass
     {
         static void Main(string[] args)
         {
-            bool[,] walls = new bool[3, 3];
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    walls[i, j] = false;
-                }
-            }
-            Maze test = new Maze(walls, walls);
+            bool[,] vertWalls = new bool[3, 3];
+            bool[,] horWalls = new bool[2, 4];
+			for (int i = 0; i < 3; i++)
+			{
+				for (int j = 0; j < 3; j++)
+				{
+					vertWalls[i, j] = false;
+				}
+			}
+			for (int i = 0; i < 2; i++)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					horWalls[i, j] = false;
+				}
+			}
+			Maze test = new Maze(vertWalls, horWalls);
             test.MovePlayer(true, false);
             test.MovePlayer(false, false);
             for (int i = 0; i < 4; i++)

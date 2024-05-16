@@ -33,6 +33,8 @@ namespace Mazeclass
         //they start at the upper left corner
         /*
          * width = 4, height = 3
+         * 3*3 vertical walls
+         * 4*2 horizontal walls
             0   1   2
     0 _ |0,0|1,0|2,0|3,0|
     1 _ |0,1|1,1|2,1|3,1|
@@ -42,9 +44,12 @@ namespace Mazeclass
         public Maze(bool[,] verticalWalls, bool[,] horizontalWalls)
         {
             //the edges are always walls
-            this.height = verticalWalls.GetLength(0)+1;  //GetLength(0), GetLength(1): gives me height and width of a matrix
-            this.width = verticalWalls.GetLength(1)+1;
-            if (verticalWalls.GetLength(0) == horizontalWalls.GetLength(0) && verticalWalls.GetLength(1) == horizontalWalls.GetLength(1))
+
+            //vert. walls. horizontal coord * vertical coord-1
+            //horizontal walls: horizontal coord-1 * vertical walls
+            this.height = verticalWalls.GetLength(0);  //GetLength(0), GetLength(1): gives me height and width of a matrix
+            this.width = horizontalWalls.GetLength(1);
+            if (verticalWalls.GetLength(0) == horizontalWalls.GetLength(0)+1 && verticalWalls.GetLength(1) == horizontalWalls.GetLength(1)+1)
             {
 				this.verticalWalls = verticalWalls;
 				this.horizontalWalls = horizontalWalls;
@@ -83,22 +88,26 @@ namespace Mazeclass
                 Console.WriteLine();
             }
 
-            Console.WriteLine("Walls: \n");
+            Console.WriteLine("Hortizontal walls: \n");
 			for (int i = 0; i < height-1; i++)
 			{
-				for (int j = 0; j < width-1; j++)
+				for (int j = 0; j < width; j++)
 				{
 					Console.Write($"{horizontalWalls[i, j]} ");
 				}
 				Console.WriteLine("  horizontal");
+			}
 
+			Console.WriteLine("Vertical walls: \n");
+			for (int i = 0; i < height; i++)
+			{
 				for (int j = 0; j < width-1; j++)
 				{
 					Console.Write($"{verticalWalls[i, j]} ");
 				}
-				Console.WriteLine("  vertical");
+				Console.WriteLine("  horizontal");
 			}
-            Console.WriteLine($"player coords: {playerXCoord}, {playerYCoord}");
+			Console.WriteLine($"player coords: {playerXCoord}, {playerYCoord}");
 
         }
         //END OF DEBUG
