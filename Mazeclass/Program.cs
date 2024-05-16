@@ -26,7 +26,7 @@ namespace Mazeclass
 					horWalls[i, j] = false;
 				}
 			}
-			Maze test = new Maze(2, 5);
+			Maze test = new Maze(15, 5);
                 test.WriteFullStatus();
             
             Console.ReadLine();

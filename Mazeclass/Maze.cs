@@ -18,7 +18,7 @@ namespace Mazeclass
         Building_NotPartOfMaze
     }
     internal class Maze
-    { 
+    {
         //technically i could get height and width from the matrixes
         //but it would make things a lot more complicated
         private int height { get; set; }
@@ -51,14 +51,14 @@ namespace Mazeclass
             //horizontal walls: horizontal coord-1 * vertical walls
             this.height = verticalWalls.GetLength(0);  //GetLength(0), GetLength(1): gives me height and width of a matrix
             this.width = horizontalWalls.GetLength(1);
-            if (verticalWalls.GetLength(0) == horizontalWalls.GetLength(0)+1 && verticalWalls.GetLength(1)+1 == horizontalWalls.GetLength(1))
+            if (verticalWalls.GetLength(0) == horizontalWalls.GetLength(0) + 1 && verticalWalls.GetLength(1) + 1 == horizontalWalls.GetLength(1))
             {
-				this.verticalWalls = verticalWalls;
-				this.horizontalWalls = horizontalWalls;
-				//only the inner walls are represented here
-				playerXCoord = 0;
-				playerYCoord = 0;
-				cells = new MazeCellStatus[width, height];
+                this.verticalWalls = verticalWalls;
+                this.horizontalWalls = horizontalWalls;
+                //only the inner walls are represented here
+                playerXCoord = 0;
+                playerYCoord = 0;
+                cells = new MazeCellStatus[width, height];
                 for (int i = 0; i < width; i++)
                 {
                     for (int j = 0; j < height; j++)
@@ -85,35 +85,35 @@ namespace Mazeclass
         {
             Console.WriteLine("Cells: \n");
 
-			for (int i = 0; i < width; i++)
-			{
+            for (int i = 0; i < width; i++)
+            {
                 for (int j = 0; j < height; j++)
                 {
                     Console.Write($"{i},{j} {cells[i, j]} ");
-				}
+                }
                 Console.WriteLine();
             }
 
             Console.WriteLine("Hortizontal walls: \n");
-			for (int i = 0; i < width; i++)
-			{
-				for (int j = 0; j < height-1; j++)
-				{
-					Console.Write($"{horizontalWalls[i, j]} ");
-				}
-				Console.WriteLine("  horizontal");
-			}
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height - 1; j++)
+                {
+                    Console.Write($"{horizontalWalls[i, j]} ");
+                }
+                Console.WriteLine("  horizontal");
+            }
 
-			Console.WriteLine("Vertical walls: \n");
-			for (int i = 0; i < width-1; i++)
-			{
-				for (int j = 0; j < height; j++)
-				{
-					Console.Write($"{verticalWalls[i, j]} ");
-				}
-				Console.WriteLine("  vertical");
-			}
-			Console.WriteLine($"player coords: {playerXCoord}, {playerYCoord}");
+            Console.WriteLine("Vertical walls: \n");
+            for (int i = 0; i < width - 1; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    Console.Write($"{verticalWalls[i, j]} ");
+                }
+                Console.WriteLine("  vertical");
+            }
+            Console.WriteLine($"player coords: {playerXCoord}, {playerYCoord}");
 
         }
         //END OF DEBUG
@@ -149,11 +149,11 @@ namespace Mazeclass
                 else
                 {
 
-                cells[playerXCoord, playerYCoord] = MazeCellStatus.PlayerHere;
+                    cells[playerXCoord, playerYCoord] = MazeCellStatus.PlayerHere;
                 }
             }
 
-		}
+        }
 
         private bool CanIGoThere(bool areWeGoingVertical, bool areWeIncreasingCoord)
         {
@@ -165,12 +165,12 @@ namespace Mazeclass
             }
             else
             {
-                wallXCoord = areWeIncreasingCoord ? playerXCoord:playerXCoord-1;                
+                wallXCoord = areWeIncreasingCoord ? playerXCoord : playerXCoord - 1;
             }
             //is out of bounds: as in, are we trying to go out of bounds
             //if the wall coords are outside the wall matrix, then it means they are the outer edges not represented in the matrixes
             //which are always walls, never walkable
-            bool isOutOfBounds = wallXCoord < 0 || wallYCoord < 0 || wallXCoord == width-1 || wallYCoord == height-1; 
+            bool isOutOfBounds = wallXCoord < 0 || wallYCoord < 0 || wallXCoord == width - 1 || wallYCoord == height - 1;
             if (isOutOfBounds)
             {
                 return false;
@@ -201,13 +201,13 @@ namespace Mazeclass
             {
                 unaddedNeighborList.Add(new Tuple<int, int>(xcoord - 1, ycoord));
             }
-            
-            if (ycoord + 1 < height && cells[xcoord, ycoord+1] == MazeCellStatus.Building_NotPartOfMaze)
+
+            if (ycoord + 1 < height && cells[xcoord, ycoord + 1] == MazeCellStatus.Building_NotPartOfMaze)
             {
-                unaddedNeighborList.Add(new Tuple<int, int>(xcoord, ycoord+1));
+                unaddedNeighborList.Add(new Tuple<int, int>(xcoord, ycoord + 1));
             }
-            
-            if (ycoord - 1 >=0 && cells[xcoord, ycoord-1] == MazeCellStatus.Building_NotPartOfMaze)
+
+            if (ycoord - 1 >= 0 && cells[xcoord, ycoord - 1] == MazeCellStatus.Building_NotPartOfMaze)
             {
                 unaddedNeighborList.Add(new Tuple<int, int>(xcoord, ycoord - 1));
             }
@@ -219,7 +219,7 @@ namespace Mazeclass
             this.height = height;
             this.width = width;
             this.horizontalWalls = new bool[width, height - 1];
-            this.verticalWalls = new bool[width - 1,height];
+            this.verticalWalls = new bool[width - 1, height];
 
             //vert. walls. horizontal coord * vertical coord-1
             //horizontal walls: horizontal coord-1 * vertical walls
@@ -229,7 +229,7 @@ namespace Mazeclass
                 for (int j = 0; j < height; j++)
                 {
                     verticalWalls[i, j] = true;
-                    
+
                 }
             }
             for (int i = 0; i < width; i++)
@@ -255,49 +255,92 @@ namespace Mazeclass
             playerXCoord = rnd.Next(width);
             playerYCoord = rnd.Next(height);
             cells[playerXCoord, playerYCoord] = MazeCellStatus.Building_PartOfMaze;
-            List<Tuple<int, int>> placesItCanGo = FindUnaddedNeighbors(playerXCoord,playerYCoord);
+            List<Tuple<int, int>> placesToStartOver = new List<Tuple<int, int>>();
             do
             {
-                //choose next place
-                Tuple<int, int> nextCellCoords = placesItCanGo[rnd.Next(placesItCanGo.Count)];
-                //break down wall
-                if (playerXCoord == nextCellCoords.Item1)
+                
+            List<Tuple<int, int>> placesItCanGo = FindUnaddedNeighbors(playerXCoord, playerYCoord);
+                do
                 {
-                    if (playerYCoord < nextCellCoords.Item2)
+                    if (placesItCanGo.Count == 0)
                     {
-                        horizontalWalls[playerXCoord, playerYCoord] = false;
+                        break;
+                    }
+                    //choose next place
+                    Tuple<int, int> nextCellCoords = placesItCanGo[rnd.Next(placesItCanGo.Count)];
+                    //break down wall
+                    if (playerXCoord == nextCellCoords.Item1)
+                    {
+                        if (playerYCoord < nextCellCoords.Item2)
+                        {
+                            horizontalWalls[playerXCoord, playerYCoord] = false;
+                        }
+                        else
+                        {
+                            horizontalWalls[playerXCoord, nextCellCoords.Item2] = false;
+                        }
                     }
                     else
                     {
-                        horizontalWalls[playerXCoord, nextCellCoords.Item2] = false;
+                        if (playerXCoord < nextCellCoords.Item1)
+                        {
+                            verticalWalls[playerXCoord, playerYCoord] = false;
+                        }
+                        else
+                        {
+                            verticalWalls[nextCellCoords.Item1, playerYCoord] = false;
+                        }
                     }
-                }
-                else
+                    //go to next place
+                    playerXCoord = nextCellCoords.Item1;
+                    playerYCoord = nextCellCoords.Item2;
+                    //mark new place as maze part
+                    cells[playerXCoord, playerYCoord] = MazeCellStatus.Building_PartOfMaze;
+                    //find next possible places
+                    placesItCanGo = FindUnaddedNeighbors(playerXCoord, playerYCoord);
+                    WriteFullStatus();
+
+                } while (placesItCanGo.Count != 0);
+                placesToStartOver.Clear();
+                //the walk ends when the pseudo player backed itself into a corner.
+                //after this, it goes "hunting": it goes to find cells that are part of the maze
+                //with at least one neighbor that is not a part of the maze.
+                //Then, it places the player there, and goes on walks again.
+                for (int i = 0; i < width; i++)
                 {
-                    if (playerXCoord < nextCellCoords.Item1)
+                    for (int j = 0; j < height; j++)
                     {
-                        verticalWalls[playerXCoord, playerYCoord] = false;
-                    }
-                    else
-                    {
-                        horizontalWalls[nextCellCoords.Item1, playerYCoord] = false;
+                        if (cells[i,j] == MazeCellStatus.Building_PartOfMaze && FindUnaddedNeighbors(i,j).Count !=0)
+                        {
+                            placesToStartOver.Add(new Tuple<int, int>(i, j));                                
+                        }
                     }
                 }
-                //go to next place
-                playerXCoord = nextCellCoords.Item1;
-                playerYCoord = nextCellCoords.Item2;
-                //mark new place as maze part
-                cells[playerXCoord, playerYCoord] = MazeCellStatus.Building_PartOfMaze;
-                //find next possible places
-                placesItCanGo = FindUnaddedNeighbors(playerXCoord, playerYCoord);
-                WriteFullStatus();
+                if (placesToStartOver.Count != 0)
+                {
+                    Tuple<int, int> nextCellCoords = placesToStartOver[rnd.Next(placesToStartOver.Count)];
+                    playerXCoord = nextCellCoords.Item1;
+                    playerYCoord = nextCellCoords.Item2;
+                }
 
-            } while (placesItCanGo.Count > 0);
+            } while (placesToStartOver.Count !=0);
 
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    cells[i, j] = MazeCellStatus.Unvisited;
+                }
+            }
+            playerXCoord = 0;
+            playerYCoord = 0;
+
+            cells[0, 0] = MazeCellStatus.PlayerHere;
+            cells[width - 1, height - 1] = MazeCellStatus.Goal;
 
         }
 
     }
-    
+
 
 }
