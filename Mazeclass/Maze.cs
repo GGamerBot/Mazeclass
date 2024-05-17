@@ -31,7 +31,7 @@ namespace Mazeclass
         public int playerXCoord { get; set; }
         public int playerYCoord { get; set; }
 
-        //first coordinate is horizontal, X, second is vertical, Y
+        //first coordinate is horizontal, width, X, second is vertical, height, Y
         //they start at the upper left corner
         /*
          * width = 4, height = 3
@@ -85,10 +85,10 @@ namespace Mazeclass
         {
             Console.WriteLine("Cells: \n");
 
-            for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++) 
             {
-                for (int j = 0; j < height; j++)
-                {
+                for (int i = 0; i < width; i++)
+				{
                     Console.Write($"{i},{j} {cells[i, j]} ");
                 }
                 Console.WriteLine();
@@ -117,10 +117,6 @@ namespace Mazeclass
 
         }
         //END OF DEBUG	    
-        public bool AreWeWinning()
-        {
-            return cells[playerXCoord, playerYCoord] == MazeCellStatus.Goal;
-        }
         //using these two bools (areWeGoingVertical,areWeIncreasingCoord)
         //makes this feel more understandable for me
         //feel free to revise. maybe keystroke would work better
@@ -145,7 +141,7 @@ namespace Mazeclass
                 {
                     playerXCoord--;
                 }
-                if (cells[playerXCoord, playerYCoord] == MazeCellStatus.Goal)
+                if (AreWeWinning()) 
                 {
                     Console.WriteLine("You won!");
                 }
@@ -185,7 +181,6 @@ namespace Mazeclass
         }
 
 
-        //*TODO PROC GEN
         //PROCEDURAL GENERATION
         //hunt-and-kill algorythm
         //I found it here: https://weblog.jamisbuck.org/2011/1/24/maze-generation-hunt-and-kill-algorithm
